@@ -7,6 +7,8 @@ export default function Home() {
   const [name, setName] = useState<string>();
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     const name = sessionStorage.getItem("name");
 
     if (name) {
@@ -28,7 +30,11 @@ type Message = {
 };
 
 function Chat() {
-  const userName = sessionStorage.getItem("name") || undefined;
+  const [userName] = useState(() => {
+    if (typeof window === "undefined") return;
+
+    return sessionStorage.getItem("name") || undefined;
+  });
 
   const [messages, setMessages] = useState<Message[]>([]);
 
@@ -124,6 +130,8 @@ function Prompt() {
             const name = formData.get("name")?.toString().trim();
 
             if (!name) return;
+
+            if (typeof window === "undefined") return;
 
             sessionStorage.setItem("name", name);
           }}
