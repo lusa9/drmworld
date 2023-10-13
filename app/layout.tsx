@@ -22,7 +22,7 @@ export default function RootLayout({
             <span className="text-[#600FFF] font-semibold">drm</span>world
           </p>
         </nav>
-        <main className="min-h-[calc(100svh-80px)] flex-1 flex flex-col">
+        <main className="min-h-[calc(100svh-85px)] flex-1 flex flex-col">
           {children}
         </main>
       </body>
