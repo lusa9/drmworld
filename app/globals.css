@@ -20,7 +20,7 @@ body {
 }
 
 .maincol {
-  @apply mx-auto px-8 max-w-screen-lg w-full;
+  @apply mx-auto px-2 sm:px-8 max-w-screen-lg w-full;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
