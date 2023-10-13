@@ -1,7 +1,8 @@
 "use client";
 
+import { useChat } from "ai/react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
   const [name, setName] = useState<string>();
@@ -30,6 +31,13 @@ type Message = {
 };
 
 function Chat() {
+  const {
+    messages: vercelMessages,
+    input,
+    handleInputChange,
+    handleSubmit,
+  } = useChat();
+
   const [userName] = useState(() => {
     if (typeof window === "undefined") return;
 
@@ -61,34 +69,32 @@ function Chat() {
         </p>
       </div>
       <div className="mt-6 border-t border-white/20" />
-      <MessageBar messages={messages} />
+      <MessageBar
+        messages={
+          userName
+            ? [
+                {
+                  role: "assistant",
+                  createdAt: new Date(),
+                  content: `Hi ${userName} :))`,
+                } as any,
+                ...vercelMessages,
+              ]
+            : []
+        }
+      />
       <form
         id="message-form"
         className="flex gap-4 mt-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-
-          const formData = new FormData(e.target as any);
-          const message = formData.get("message")?.toString().trim();
-
-          if (!message) return;
-
-          setMessages((messages) => [...messages, { message, sender: "user" }]);
-
-          const messageScrollBar = document.getElementById(
-            "message-scrollbar"
-          ) as HTMLDivElement;
-
-          messageScrollBar.scrollTop = messageScrollBar.scrollHeight;
-
-          (document.getElementById("message-form") as HTMLFormElement).reset();
-        }}
+        onSubmit={handleSubmit}
       >
         <input
           id="message-input"
           className="bg-white/10 px-4 py-3 flex-1"
           placeholder="Type a message"
           name="message"
+          value={input}
+          onChange={handleInputChange}
         />
         <button className="bg-[#600FFF] w-32 m-0.5 px-4 rounded font-medium">
           Send
@@ -98,31 +104,51 @@ function Chat() {
   );
 }
 
-function MessageBar({ messages }: { messages: Message[] }) {
+function MessageBar({
+  messages,
+}: {
+  messages: ReturnType<typeof useChat>["messages"];
+}) {
   return (
     <div className="flex-1 mx-2 mt-8 relative">
       <div
         id="message-scrollbar"
-        className="absolute inset-0 space-y-4 overflow-y-scroll no-scrollbar"
+        className="absolute inset-0 space-y-6 overflow-y-scroll no-scrollbar"
       >
         {messages.map((message) => (
           <div
+            id={message.id}
             className={
               "flex" +
-              (message.sender === "user" ? " justify-end" : " justify-start")
+              (message.role === "user" ? " justify-end" : " justify-start")
             }
           >
-            <p
-              className={
-                "p-4 rounded-xl" +
-                (message.sender === "AI"
-                  ? " bg-white/10 rounded-tl-none"
-                  : " bg-[#600FFFE6] rounded-tr-none")
-              }
-              key={JSON.stringify(message)}
-            >
-              {message.message}
-            </p>
+            <div>
+              <p
+                className={
+                  "p-4 rounded-xl" +
+                  (message.role === "assistant"
+                    ? " bg-white/10 rounded-tl-none"
+                    : " bg-[#600FFFE6] rounded-tr-none")
+                }
+                key={JSON.stringify(message)}
+              >
+                {message.content}
+              </p>
+              <p
+                className={
+                  "text-xs font-thin m-2" +
+                  (message.role === "assistant" ? " text-left" : " text-right")
+                }
+              >
+                {message.createdAt &&
+                  `${message.createdAt.getHours()}:${
+                    message.createdAt.getMinutes() < 10
+                      ? `0${message.createdAt.getMinutes()}`
+                      : message.createdAt.getMinutes()
+                  }`}
+              </p>
+            </div>
           </div>
         ))}
       </div>
