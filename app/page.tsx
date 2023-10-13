@@ -69,7 +69,20 @@ function Chat() {
         </p>
       </div>
       <div className="mt-6 border-t border-white/20" />
-      <MessageBar messages={vercelMessages} />
+      <MessageBar
+        messages={
+          userName
+            ? [
+                {
+                  role: "assistant",
+                  createdAt: new Date(),
+                  content: `Hi ${userName} :))`,
+                } as any,
+                ...vercelMessages,
+              ]
+            : []
+        }
+      />
       <form
         id="message-form"
         className="flex gap-4 mt-4"
