@@ -6,6 +6,7 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
+  --accent: "#600FFF";
 }
 
 @media (prefers-color-scheme: dark) {
@@ -24,4 +25,8 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+}
+
+.maincol {
+  @apply mx-auto px-8 max-w-screen-xl w-full;
 }
