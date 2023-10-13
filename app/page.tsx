@@ -75,6 +75,12 @@ function Chat() {
 
           setMessages((messages) => [...messages, { message, sender: "user" }]);
 
+          const messageScrollBar = document.getElementById(
+            "message-scrollbar"
+          ) as HTMLDivElement;
+
+          messageScrollBar.scrollTop = messageScrollBar.scrollHeight;
+
           (document.getElementById("message-form") as HTMLFormElement).reset();
         }}
       >
@@ -94,27 +100,32 @@ function Chat() {
 
 function MessageBar({ messages }: { messages: Message[] }) {
   return (
-    <div className="flex-1 mx-2 mt-8 overflow-y-scroll space-y-4">
-      {messages.map((message) => (
-        <div
-          className={
-            "flex" +
-            (message.sender === "user" ? " justify-end" : " justify-start")
-          }
-        >
-          <p
+    <div className="flex-1 mx-2 mt-8 relative">
+      <div
+        id="message-scrollbar"
+        className="absolute inset-0 space-y-4 overflow-y-scroll no-scrollbar"
+      >
+        {messages.map((message) => (
+          <div
             className={
-              "p-4 rounded-xl" +
-              (message.sender === "AI"
-                ? " bg-white/10 rounded-tl-none"
-                : " bg-[#600FFFE6] rounded-tr-none")
+              "flex" +
+              (message.sender === "user" ? " justify-end" : " justify-start")
             }
-            key={JSON.stringify(message)}
           >
-            {message.message}
-          </p>
-        </div>
-      ))}
+            <p
+              className={
+                "p-4 rounded-xl" +
+                (message.sender === "AI"
+                  ? " bg-white/10 rounded-tl-none"
+                  : " bg-[#600FFFE6] rounded-tr-none")
+              }
+              key={JSON.stringify(message)}
+            >
+              {message.message}
+            </p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
