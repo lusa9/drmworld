@@ -28,5 +28,5 @@ body {
 }
 
 .maincol {
-  @apply mx-auto px-8 max-w-screen-xl w-full;
+  @apply mx-auto px-8 max-w-screen-lg w-full;
 }

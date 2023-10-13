@@ -17,9 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className + "flex flex-col"}>
-        <nav className="p-6">
-          <p className="text-2xl">
-            <span className="text-red-200 font-semibold">drm</span>world
+        <nav className="py-6 px-10">
+          <p className="text-[1.55rem]">
+            <span className="text-[#600FFF] font-semibold">drm</span>world
           </p>
         </nav>
         <main className="min-h-[calc(100svh-80px)] flex-1 flex flex-col">
