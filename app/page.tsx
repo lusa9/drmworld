@@ -109,11 +109,22 @@ function MessageBar({
 }: {
   messages: ReturnType<typeof useChat>["messages"];
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const scrollDiv = ref.current;
+
+    if (!scrollDiv) return;
+
+    scrollDiv.scrollTop = scrollDiv.scrollHeight;
+  }, [messages]);
+
   return (
     <div className="flex-1 mx-2 mt-8 relative">
       <div
         id="message-scrollbar"
         className="absolute inset-0 space-y-6 overflow-y-scroll no-scrollbar"
+        ref={ref}
       >
         {messages.map((message) => (
           <div
