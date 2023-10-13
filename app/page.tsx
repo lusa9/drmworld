@@ -99,7 +99,9 @@ function MessageBar({ messages }: { messages: Message[] }) {
           <p
             className={
               "p-4 rounded-xl" +
-              (message.sender === "AI" ? " bg-white/10" : " bg-[#600FFFE6]")
+              (message.sender === "AI"
+                ? " bg-white/10 rounded-tl-none"
+                : " bg-[#600FFFE6] rounded-tr-none")
             }
             key={JSON.stringify(message)}
           >
