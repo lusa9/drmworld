@@ -31,28 +31,22 @@ type Message = {
 };
 
 function Chat() {
-  const {
-    messages: vercelMessages,
-    input,
-    handleInputChange,
-    handleSubmit,
-  } = useChat();
-
   const [userName] = useState(() => {
     if (typeof window === "undefined") return;
 
     return sessionStorage.getItem("name") || undefined;
   });
 
-  const [messages, setMessages] = useState<Message[]>([]);
-
-  useEffect(() => {
-    if (!userName) return;
-
-    if (messages.length === 0) {
-      setMessages([{ message: `Hi ${userName}, how are you?`, sender: "AI" }]);
-    }
-  }, [userName]);
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    initialMessages: [
+      {
+        createdAt: new Date(),
+        content: `Hi ${userName}, how are you?`,
+        role: "assistant",
+        id: "",
+      },
+    ],
+  });
 
   return (
     <div className="maincol mt-4 flex flex-col flex-1 pb-8">
@@ -69,20 +63,7 @@ function Chat() {
         </p>
       </div>
       <div className="mt-6 border-t border-white/20" />
-      <MessageBar
-        messages={
-          userName
-            ? [
-                {
-                  role: "assistant",
-                  createdAt: new Date(),
-                  content: `Hi ${userName} :))`,
-                } as any,
-                ...vercelMessages,
-              ]
-            : []
-        }
-      />
+      <MessageBar messages={userName ? messages : []} />
       <form
         id="message-form"
         className="flex gap-4 mt-4"
