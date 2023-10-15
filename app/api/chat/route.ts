@@ -14,15 +14,21 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
 
-    const response = await openai.chat.completions.create({
+    const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
-      stream: true,
-      messages,
+      stream: false,
+      messages: [
+        {
+          role: "system",
+          content: "Bianca is a dominant, provoking and flirtatious woman.",
+        },
+        ...messages,
+      ],
     });
 
-    const stream = OpenAIStream(response);
+    const message = completion.choices[0].message.content;
 
-    return new StreamingTextResponse(stream);
+    return NextResponse.json(message);
   } catch (error) {
     // Check if the error is an APIError
     if (error instanceof OpenAI.APIError) {

@@ -41,7 +41,7 @@ function Chat() {
     initialMessages: [
       {
         createdAt: new Date(),
-        content: `Hi ${userName}, how are you?`,
+        content: `Hi ${userName}, what a gorgeous day isn't it?`,
         role: "assistant",
         id: "",
       },
@@ -125,7 +125,7 @@ function MessageBar({
                 }
                 key={JSON.stringify(message)}
               >
-                {message.content}
+                {message.content.replace(/["\\]+/g, "")}
               </p>
               <p
                 className={
